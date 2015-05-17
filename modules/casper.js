@@ -2413,14 +2413,19 @@ Casper.prototype.withPopup = function withPopup(popupInfo, then) {
 };
 
 /**
-* Allow user to create a new page object after calling a casper.page.close()
-* @return WebPage
-*/
+ * Allow user to create a new page object after calling a casper.page.close()
+ *
+ * @param  Boolean  closePrevious  Whether to close previous page (optional, default: true)
+ * @return WebPage
+ */
 
-Casper.prototype.newPage = function newPage() {
+Casper.prototype.newPage = function newPage(closePrevious) {
     "use strict";
+    closePrevious = (closePrevious == null) ? true : closePrevious;
     this.checkStarted();
-    this.page.close();
+    if (closePrevious) {
+        this.page.close();
+    }
     this.page = this.mainPage = createPage(this);
     this.page.settings = utils.mergeObjects(this.page.settings, this.options.pageSettings);
     if (utils.isClipRect(this.options.clipRect)) {
